@@ -1,0 +1,17 @@
+{
+  "name": "yuwo-prelaunch",
+  "version": "1.0.0",
+  "private": true,
+  "main": "express.js",
+  "scripts": {
+    "start": "node express.js",
+    "dev": "node --env-file=.env express.js"
+  },
+  "engines": {
+    "node": ">=20.6"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "googleapis": "^188.0.0"
+  }
+}

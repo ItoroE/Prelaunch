@@ -11,6 +11,8 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 const SHEET_ID = process.env.SHEET_ID;
 const SHEET_NAME = process.env.SHEET_NAME || 'Sheet1';
+// Quote the tab name so names with spaces (e.g. "Yuwo Waitlist") work in ranges
+const TAB = `'${SHEET_NAME.replace(/'/g, "''")}'`;
 
 const auth = new google.auth.JWT({
   email: process.env.GOOGLE_CLIENT_EMAIL,
@@ -30,7 +32,7 @@ app.post('/subscribe', async (req, res) => {
     // Skip duplicates to avoid clutter 
     const existing = await sheets.spreadsheets.values.get({
       spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A:A`,
+      range: `${TAB}!A:A`,
     });
     const emails = (existing.data.values || []).flat();
     if (emails.includes(email)) {
@@ -39,7 +41,7 @@ app.post('/subscribe', async (req, res) => {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A:B`,
+      range: `${TAB}!A:B`,
       valueInputOption: 'RAW',
       requestBody: { values: [[email, new Date().toISOString()]] },
     });
